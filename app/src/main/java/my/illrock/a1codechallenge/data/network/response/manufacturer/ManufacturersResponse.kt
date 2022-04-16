@@ -7,5 +7,5 @@ data class ManufacturersResponse(
     val page: Int,
     val pageSize: Int,
     val totalPageCount: Int,
-    val wkda: Map<Int, String>
+    val wkda: Map<Long, String>
 )
