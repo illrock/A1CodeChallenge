@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import my.illrock.a1codechallenge.BuildConfig
 import my.illrock.a1codechallenge.data.network.ApiService
+import my.illrock.a1codechallenge.data.network.interceptor.HttpInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,6 +24,7 @@ class AppModule {
     fun provideHttpClient(@ApplicationContext context: Context): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+        .addInterceptor(HttpInterceptor())
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
 //        .addInterceptor(FakeInterceptor(context))
         .build()

@@ -7,18 +7,16 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("car-types/manufacturer")
     suspend fun getManufacturers(
-        @Query("wa_key") waKey: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): ManufacturersResponse
 
     /*@GET("car-types/main-types")
     suspend fun getMainTypes(
-        @Query("wa_key") waKey: String,
         @Query("manufacturer") manufacturer: Int,
-    ): MainTypesResponse
+    ): MainTypesResponse*/
 
-    @GET("car-types/built-dates")
+    /*@GET("car-types/built-dates")
     suspend fun getBuiltDates(
     ): BuiltDatesResponse*/
 }
