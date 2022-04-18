@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import my.illrock.a1codechallenge.data.model.Manufacturer
 import my.illrock.a1codechallenge.databinding.FragmentManufacturersBinding
 
 @AndroidEntryPoint
@@ -19,13 +21,9 @@ class ManufacturersFragment : Fragment() {
     private var _binding: FragmentManufacturersBinding? = null
     private val binding get() = _binding!!
 
-    private val manufacturersAdapter = ManufacturersAdapter()
+    private val manufacturersAdapter = ManufacturersAdapter(::onItemClick)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentManufacturersBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,5 +43,12 @@ class ManufacturersFragment : Fragment() {
                 manufacturersAdapter.submitData(pagingData)
             }
         }
+    }
+
+    private fun onItemClick(manufacturer: Manufacturer) {
+        val action = ManufacturersFragmentDirections
+            .actionManufacturersFragmentToMainTypesFragment(manufacturer.id, manufacturer.name)
+        findNavController()
+            .navigate(action)
     }
 }

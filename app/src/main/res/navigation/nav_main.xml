@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/manufacturersFragment"
+    >
+
+    <fragment
+        android:id="@+id/manufacturersFragment"
+        android:name="my.illrock.a1codechallenge.presentation.view.manufacturer.ManufacturersFragment"
+        tools:layout="@layout/fragment_manufacturers"
+        >
+
+        <action
+            android:id="@+id/action_manufacturersFragment_to_mainTypesFragment"
+            app:destination="@id/mainTypesFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainTypesFragment"
+        android:name="my.illrock.a1codechallenge.presentation.view.maintype.MainTypesFragment"
+        tools:layout="@layout/fragment_main_types"
+        >
+        <action
+            android:id="@+id/action_mainTypesFragment_to_builtDatesFragment"
+            />
+        <argument
+            android:name="manufacturerId"
+            app:argType="long"
+            />
+        <argument
+            android:name="manufacturerName"
+            app:argType="string"
+            app:nullable="false"
+            />
+    </fragment>
+</navigation>

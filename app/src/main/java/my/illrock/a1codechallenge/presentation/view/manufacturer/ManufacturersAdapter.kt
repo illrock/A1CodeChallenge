@@ -9,16 +9,19 @@ import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.Manufacturer
 import my.illrock.a1codechallenge.databinding.ItemManufacturerBinding
 import my.illrock.a1codechallenge.presentation.view.manufacturer.ManufacturersAdapter.ManufacturerViewHolder
-import javax.inject.Inject
 
-class ManufacturersAdapter @Inject constructor(
+class ManufacturersAdapter constructor(
+    private val onClick: (Manufacturer) -> Unit
 ) : PagingDataAdapter<Manufacturer, ManufacturerViewHolder>(ManufacturersDiffUtil) {
+
     class ManufacturerViewHolder(
-        private val binding: ItemManufacturerBinding
+        private val binding: ItemManufacturerBinding,
+        val onClick: (Manufacturer) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Manufacturer) = with(binding) {
-            tvName.text = item.name
+        fun bind(manufacturer: Manufacturer) = with(binding) {
+            tvName.text = manufacturer.name
             switchBackgroundColor(this@ManufacturerViewHolder.bindingAdapterPosition)
+            itemView.setOnClickListener { onClick(manufacturer) }
         }
 
         private fun switchBackgroundColor(position: Int) {
@@ -30,11 +33,8 @@ class ManufacturersAdapter @Inject constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ManufacturerViewHolder(
-        ItemManufacturerBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        ItemManufacturerBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        onClick
     )
 
     override fun onBindViewHolder(holder: ManufacturerViewHolder, position: Int) {
