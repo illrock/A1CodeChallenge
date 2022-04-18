@@ -1,14 +1,14 @@
-package my.illrock.a1codechallenge.presentation.view.manufacturer
+package my.illrock.a1codechallenge.presentation.view.manufacturer.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.Manufacturer
 import my.illrock.a1codechallenge.databinding.ItemManufacturerBinding
-import my.illrock.a1codechallenge.presentation.view.manufacturer.ManufacturersAdapter.ManufacturerViewHolder
+import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturersAdapter.ManufacturerViewHolder
+import my.illrock.a1codechallenge.util.switchBackgroundColor
 
 class ManufacturersAdapter constructor(
     private val onClick: (Manufacturer) -> Unit
@@ -20,15 +20,8 @@ class ManufacturersAdapter constructor(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(manufacturer: Manufacturer) = with(binding) {
             tvName.text = manufacturer.name
-            switchBackgroundColor(this@ManufacturerViewHolder.bindingAdapterPosition)
+            itemView.switchBackgroundColor(bindingAdapterPosition)
             itemView.setOnClickListener { onClick(manufacturer) }
-        }
-
-        private fun switchBackgroundColor(position: Int) {
-            val backgroundColorRes = if (position % 2 == 0) {
-                R.color.item_background_first
-            } else R.color.item_background_second
-            itemView.setBackgroundResource(backgroundColorRes)
         }
     }
 

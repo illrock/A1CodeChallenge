@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import my.illrock.a1codechallenge.data.model.MainType
 import my.illrock.a1codechallenge.databinding.ItemMainTypeBinding
+import my.illrock.a1codechallenge.util.switchBackgroundColor
 
 class MainTypesAdapter(
     private val onClick: (MainType) -> Unit
@@ -18,6 +19,7 @@ class MainTypesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(mainType: MainType) {
             binding.tvName.text = mainType.name
+            itemView.switchBackgroundColor(bindingAdapterPosition)
             itemView.setOnClickListener { onClick(mainType) }
         }
     }

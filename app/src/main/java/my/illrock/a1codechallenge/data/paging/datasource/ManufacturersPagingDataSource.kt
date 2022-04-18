@@ -31,7 +31,12 @@ class ManufacturersPagingDataSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Manufacturer>): Int? = null
+    override fun getRefreshKey(state: PagingState<Int, Manufacturer>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
+    }
 
     companion object {
         private const val DEFAULT_PAGE = 0

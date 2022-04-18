@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.databinding.ItemBuiltDateBinding
+import my.illrock.a1codechallenge.util.switchBackgroundColor
 
 class BuiltDatesAdapter(
     private val onClick: (BuiltDate) -> Unit
@@ -18,6 +19,7 @@ class BuiltDatesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(builtDate: BuiltDate) {
             binding.tvDate.text = builtDate.date
+            itemView.switchBackgroundColor(bindingAdapterPosition)
             itemView.setOnClickListener { onClick(builtDate) }
         }
     }
