@@ -1,5 +1,6 @@
 package my.illrock.a1codechallenge.data.network
 
+import my.illrock.a1codechallenge.data.network.response.manufacturer.BuiltDatesResponse
 import my.illrock.a1codechallenge.data.network.response.manufacturer.MainTypesResponse
 import my.illrock.a1codechallenge.data.network.response.manufacturer.ManufacturersResponse
 import retrofit2.http.GET
@@ -17,7 +18,9 @@ interface ApiService {
         @Query("manufacturer") manufacturerId: Long,
     ): MainTypesResponse
 
-    /*@GET("car-types/built-dates")
+    @GET("car-types/built-dates")
     suspend fun getBuiltDates(
-    ): BuiltDatesResponse*/
+        @Query("manufacturer") manufacturerId: Long,
+        @Query("main-type") mainTypeId: String
+    ): BuiltDatesResponse
 }

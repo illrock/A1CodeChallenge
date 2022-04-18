@@ -31,9 +31,9 @@ class MainTypesAdapter(
         val mainType = getItem(position)
         holder.bind(mainType)
     }
-}
 
-object MainTypeDiffCallback : DiffUtil.ItemCallback<MainType>() {
-    override fun areItemsTheSame(oldItem: MainType, newItem: MainType) = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: MainType, newItem: MainType) = oldItem == newItem
+    object MainTypeDiffCallback : DiffUtil.ItemCallback<MainType>() {
+        override fun areItemsTheSame(oldItem: MainType, newItem: MainType) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: MainType, newItem: MainType) = oldItem == newItem
+    }
 }

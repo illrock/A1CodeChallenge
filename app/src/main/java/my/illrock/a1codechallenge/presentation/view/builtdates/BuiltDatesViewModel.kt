@@ -1,4 +1,4 @@
-package my.illrock.a1codechallenge.presentation.view.maintype
+package my.illrock.a1codechallenge.presentation.view.builtdates
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,40 +9,38 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import my.illrock.a1codechallenge.data.model.MainType
+import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.data.network.response.ResultWrapper
-import my.illrock.a1codechallenge.data.repository.MainTypesRepository
-import my.illrock.a1codechallenge.util.print
+import my.illrock.a1codechallenge.data.repository.BuiltDatesRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MainTypesViewModel @Inject constructor(
-    private val repository: MainTypesRepository,
+class BuiltDatesViewModel @Inject constructor(
+    private val repository: BuiltDatesRepository,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _mainTypes = MutableLiveData<List<MainType>>(listOf())
-    val mainTypes: LiveData<List<MainType>> = _mainTypes
+    private val _builtDates = MutableLiveData<List<BuiltDate>>(listOf())
+    val builtDates: LiveData<List<BuiltDate>> = _builtDates
 
-    fun loadMainTypes(manufacturerId: Long, isForce: Boolean) {
-        if (!isForce && !mainTypes.value.isNullOrEmpty()) return
+    fun loadBuiltDates(manufacturerId: Long, mainTypeId: String, isForce: Boolean) {
+        if (!isForce && !builtDates.value.isNullOrEmpty()) return
 
         viewModelScope.launch(dispatcher) {
-            repository.get(manufacturerId).let { result ->
+            repository.get(manufacturerId, mainTypeId).let { result ->
                 withContext(Dispatchers.Main) {
-                    handleMainTypesResult(result)
+                    handleBuiltDatesResult(result)
                 }
             }
         }
     }
 
-    private fun handleMainTypesResult(result: ResultWrapper<List<MainType>>) {
+    private fun handleBuiltDatesResult(result: ResultWrapper<List<BuiltDate>>) {
         when (result) {
             is ResultWrapper.Success -> {
-                _mainTypes.value = result.data
+                _builtDates.value = result.data
             }
             is ResultWrapper.Error -> {
                 //todo show error
-                result.exception.print()
             }
         }
     }

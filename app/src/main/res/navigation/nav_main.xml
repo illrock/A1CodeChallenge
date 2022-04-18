@@ -6,13 +6,11 @@
     android:id="@+id/nav_main"
     app:startDestination="@id/manufacturersFragment"
     >
-
     <fragment
         android:id="@+id/manufacturersFragment"
         android:name="my.illrock.a1codechallenge.presentation.view.manufacturer.ManufacturersFragment"
         tools:layout="@layout/fragment_manufacturers"
         >
-
         <action
             android:id="@+id/action_manufacturersFragment_to_mainTypesFragment"
             app:destination="@id/mainTypesFragment"
@@ -26,15 +24,26 @@
         >
         <action
             android:id="@+id/action_mainTypesFragment_to_builtDatesFragment"
+            app:destination="@id/builtDatesFragment"
             />
         <argument
-            android:name="manufacturerId"
-            app:argType="long"
+            android:name="manufacturer"
+            app:argType="my.illrock.a1codechallenge.data.model.Manufacturer"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/builtDatesFragment"
+        android:name="my.illrock.a1codechallenge.presentation.view.builtdates.BuiltDatesFragment"
+        tools:layout="@layout/fragment_built_dates"
+        >
+        <argument
+            android:name="manufacturer"
+            app:argType="my.illrock.a1codechallenge.data.model.Manufacturer"
             />
         <argument
-            android:name="manufacturerName"
-            app:argType="string"
-            app:nullable="false"
+            android:name="mainType"
+            app:argType="my.illrock.a1codechallenge.data.model.MainType"
             />
     </fragment>
 </navigation>

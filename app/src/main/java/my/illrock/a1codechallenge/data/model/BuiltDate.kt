@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class MainType(
+data class BuiltDate(
     val id: String,
-    val name: String
+    val date: String
 ) : Parcelable

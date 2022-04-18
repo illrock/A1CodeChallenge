@@ -47,7 +47,7 @@ class ManufacturersFragment : Fragment() {
 
     private fun onItemClick(manufacturer: Manufacturer) {
         val action = ManufacturersFragmentDirections
-            .actionManufacturersFragmentToMainTypesFragment(manufacturer.id, manufacturer.name)
+            .actionManufacturersFragmentToMainTypesFragment(manufacturer)
         findNavController()
             .navigate(action)
     }
