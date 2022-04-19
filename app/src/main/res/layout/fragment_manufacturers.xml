@@ -36,16 +36,34 @@
         android:layout_height="match_parent"
         tools:context=".presentation.view.manufacturer.ManufacturersFragment"
         >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvManufacturers"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="10"
-            tools:listitem="@layout/item_manufacturer"
-            />
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvManufacturers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_manufacturer"
+                />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_title"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/error_connection"
+                tools:visibility="visible"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

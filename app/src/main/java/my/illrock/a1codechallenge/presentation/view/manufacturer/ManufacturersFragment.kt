@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import my.illrock.a1codechallenge.data.model.Manufacturer
 import my.illrock.a1codechallenge.databinding.FragmentManufacturersBinding
 import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturerLoadingStateAdapter
 import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturersAdapter
+import my.illrock.a1codechallenge.util.getErrorMessage
 
 @AndroidEntryPoint
 class ManufacturersFragment : Fragment() {
@@ -51,7 +53,18 @@ class ManufacturersFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             manufacturersAdapter.loadStateFlow.collectLatest {
-                binding.srlPull.isRefreshing = it.refresh is LoadState.Loading
+                val loadState = it.refresh
+                binding.srlPull.isRefreshing = loadState is LoadState.Loading
+                if (loadState is LoadState.Error) {
+                    loadState.error.getErrorMessage(resources)?.let { message ->
+                        binding.tvError.isVisible = true
+                        binding.tvError.text = message
+                        binding.rvManufacturers.isVisible = false
+                    }
+                } else {
+                    binding.tvError.isVisible = false
+                    binding.rvManufacturers.isVisible = true
+                }
             }
         }
 
