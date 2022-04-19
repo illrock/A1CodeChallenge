@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -35,12 +36,38 @@ class BuiltDatesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = builtDatesAdapter
         }
+        binding.srlPull.setOnRefreshListener {
+            vm.loadBuiltDates(args.manufacturer.id, args.mainType.id, true)
+        }
 
         vm.builtDates.observe(viewLifecycleOwner) {
             builtDatesAdapter.submitList(it)
         }
 
+        vm.isLoading.observe(viewLifecycleOwner) {
+            binding.srlPull.isRefreshing = it
+        }
+
+        vm.errorMessage.observe(viewLifecycleOwner) {
+            showError(it)
+        }
+
+        vm.errorRes.observe(viewLifecycleOwner) {
+            showError(it)
+        }
+
         vm.loadBuiltDates(args.manufacturer.id, args.mainType.id, false)
+    }
+
+    private fun showError(errorRes: Int?) {
+        val error = errorRes?.let { getString(it) }
+        showError(error)
+    }
+
+    private fun showError(error: String?) {
+        binding.rvBuiltDates.isVisible = error == null
+        binding.tvError.isVisible = error != null
+        error?.let { binding.tvError.text = it }
     }
 
     private fun onItemClick(builtDate: BuiltDate) {

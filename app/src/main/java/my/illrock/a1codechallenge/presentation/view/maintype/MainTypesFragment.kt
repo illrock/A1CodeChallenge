@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,12 +36,38 @@ class MainTypesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = mainTypesAdapter
         }
+        binding.srlPull.setOnRefreshListener {
+            vm.loadMainTypes(args.manufacturer.id, true)
+        }
 
         vm.mainTypes.observe(viewLifecycleOwner) {
             mainTypesAdapter.submitList(it)
         }
 
+        vm.isLoading.observe(viewLifecycleOwner) {
+            binding.srlPull.isRefreshing = it
+        }
+
+        vm.errorMessage.observe(viewLifecycleOwner) {
+            showError(it)
+        }
+
+        vm.errorRes.observe(viewLifecycleOwner) {
+            showError(it)
+        }
+
         vm.loadMainTypes(args.manufacturer.id, false)
+    }
+
+    private fun showError(errorRes: Int?) {
+        val error = errorRes?.let { getString(it) }
+        showError(error)
+    }
+
+    private fun showError(error: String?) {
+        binding.rvMainTypes.isVisible = error == null
+        binding.tvError.isVisible = error != null
+        error?.let { binding.tvError.text = it }
     }
 
     private fun onItemClick(mainType: MainType) {

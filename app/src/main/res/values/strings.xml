@@ -3,5 +3,7 @@
 
     <string name="button_retry">Retry</string>
 
+    <string name="error_empty_response">No data</string>
     <string name="error_connection">No internet connection</string>
+    <string name="error_unknown">Whoops. Something went wrong.</string>
 </resources>
