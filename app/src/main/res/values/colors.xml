@@ -10,4 +10,6 @@
 
     <color name="item_background_first">@color/black</color>
     <color name="item_background_second">@color/teal_700</color>
+
+    <color name="text_main">@color/white</color>
 </resources>

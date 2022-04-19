@@ -3,6 +3,9 @@
 
     <string name="button_retry">Retry</string>
 
+    <string name="manufacturers_title">Manufacturers</string>
+    <string name="built_dates_title_placeholder">%1$s / %2$s</string>
+
     <string name="error_empty_response">No data</string>
     <string name="error_connection">No internet connection</string>
     <string name="error_unknown">Whoops. Something went wrong.</string>

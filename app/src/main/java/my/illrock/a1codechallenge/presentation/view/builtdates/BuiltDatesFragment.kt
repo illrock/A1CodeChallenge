@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.databinding.FragmentBuiltDatesBinding
 
@@ -31,6 +34,14 @@ class BuiltDatesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with (binding.toolbar) {
+            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationOnClickListener { findNavController().popBackStack() }
+            findViewById<TextView>(R.id.tvTitle)?.let {
+                it.text = getString(R.string.built_dates_title_placeholder, args.manufacturer.name, args.mainType.name)
+            }
+        }
 
         binding.rvBuiltDates.apply {
             layoutManager = LinearLayoutManager(context)
