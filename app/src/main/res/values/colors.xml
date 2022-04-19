@@ -12,4 +12,7 @@
     <color name="item_background_second">@color/teal_700</color>
 
     <color name="text_main">@color/white</color>
+    <color name="text_hint">#AAFFFFFF</color>
+
+    <color name="appbar_item">@color/white</color>
 </resources>

@@ -4,6 +4,9 @@
     <string name="button_retry">Retry</string>
 
     <string name="manufacturers_title">Manufacturers</string>
+
+    <string name="main_types_search_hint">Search car type</string>
+
     <string name="built_dates_title_placeholder">%1$s / %2$s</string>
 
     <string name="error_empty_response">No data</string>

@@ -22,6 +22,8 @@ class MainTypesViewModel @Inject constructor(
     private val repository: MainTypesRepository,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
+    private val _originalMainTypes = MutableLiveData<List<MainType>>(listOf())
+    private val _searchedMainTypes = MutableLiveData<List<MainType>>(listOf())
     private val _mainTypes = MutableLiveData<List<MainType>>(listOf())
     val mainTypes: LiveData<List<MainType>> = _mainTypes
 
@@ -33,6 +35,11 @@ class MainTypesViewModel @Inject constructor(
 
     private val _errorMessage = MutableLiveData<String?>(null)
     val errorMessage: LiveData<String?> = _errorMessage
+
+    private val _isSearch = MutableLiveData(false)
+    val isSearch: LiveData<Boolean> = _isSearch
+
+    private var searchInput: String = ""
 
     fun loadMainTypes(manufacturerId: Long, isForce: Boolean) {
         if (!isForce && !mainTypes.value.isNullOrEmpty()) return
@@ -51,7 +58,10 @@ class MainTypesViewModel @Inject constructor(
         when (result) {
             is ResultWrapper.Success -> {
                 _isLoading.value = false
-                _mainTypes.value = result.data
+                _originalMainTypes.value = result.data
+                _mainTypes.value = _originalMainTypes.value
+                    .applySearchInput(searchInput)
+
                 if (result.data.isEmpty()) {
                     _errorMessage.value = null
                     _errorRes.value = R.string.error_empty_response
@@ -83,5 +93,27 @@ class MainTypesViewModel @Inject constructor(
             }
         }
         e.print()
+    }
+
+    fun startSearch() {
+        _isSearch.value = true
+    }
+
+    fun stopSearch() {
+        _isSearch.value = false
+        _mainTypes.value = _originalMainTypes.value
+    }
+
+    fun onNewSearchInput(input: String) {
+        searchInput = input
+        _searchedMainTypes.value = _originalMainTypes.value
+            .applySearchInput(input)
+        _mainTypes.value = _searchedMainTypes.value
+    }
+
+    private fun List<MainType>?.applySearchInput(input: String): List<MainType>? {
+        return if (input.isEmpty()) this
+        else this?.filter { it.name.contains(input, true) }
+            ?: listOf()
     }
 }
