@@ -51,7 +51,7 @@ class BuiltDatesViewModel @Inject constructor(
         when (result) {
             is ResultWrapper.Success -> {
                 _isLoading.value = false
-                _builtDates.value = result.data
+                _builtDates.value = requireNotNull(result.data)
                 if (result.data.isEmpty()) {
                     _errorMessage.value = null
                     _errorRes.value = R.string.error_empty_response

@@ -58,7 +58,7 @@ class MainTypesViewModel @Inject constructor(
         when (result) {
             is ResultWrapper.Success -> {
                 _isLoading.value = false
-                _originalMainTypes.value = result.data
+                _originalMainTypes.value = requireNotNull(result.data)
                 _mainTypes.value = _originalMainTypes.value
                     .applySearchInput(searchInput)
 
