@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_manufacturersFragment_to_mainTypesFragment"
             app:destination="@id/mainTypesFragment"
+            app:enterAnim="@anim/anim_slide_in_left"
+            app:exitAnim="@anim/anim_slide_out_left"
+            app:popEnterAnim="@anim/anim_slide_in_right"
+            app:popExitAnim="@anim/anim_slide_out_right"
             />
     </fragment>
 
@@ -25,6 +29,10 @@
         <action
             android:id="@+id/action_mainTypesFragment_to_builtDatesFragment"
             app:destination="@id/builtDatesFragment"
+            app:enterAnim="@anim/anim_slide_in_left"
+            app:exitAnim="@anim/anim_slide_out_left"
+            app:popEnterAnim="@anim/anim_slide_in_right"
+            app:popExitAnim="@anim/anim_slide_out_right"
             />
         <argument
             android:name="manufacturer"

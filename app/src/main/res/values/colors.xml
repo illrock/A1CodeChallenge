@@ -8,11 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="item_background_first">@color/black</color>
-    <color name="item_background_second">@color/teal_700</color>
+    <color name="app_background">#AA6200EE</color>
+    <color name="appbar_item">@color/white</color>
 
     <color name="text_main">@color/white</color>
     <color name="text_hint">#AAFFFFFF</color>
 
-    <color name="appbar_item">@color/white</color>
+    <color name="item_background_first">#99000000</color>
+    <color name="item_background_second">#5503DAC5</color>
 </resources>
