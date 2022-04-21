@@ -31,8 +31,8 @@ class ManufacturersViewModel @Inject constructor(
                     _manufacturersFlow = flow
                 }
             } catch (e: Exception) {
+                //All errors are shown via PagingDataSource
                 e.print()
-                //todo show error
             }
         }
     }

@@ -1,8 +1,8 @@
 package my.illrock.a1codechallenge.data.network
 
-import my.illrock.a1codechallenge.data.network.response.manufacturer.BuiltDatesResponse
-import my.illrock.a1codechallenge.data.network.response.manufacturer.MainTypesResponse
-import my.illrock.a1codechallenge.data.network.response.manufacturer.ManufacturersResponse
+import my.illrock.a1codechallenge.data.network.response.BuiltDatesResponse
+import my.illrock.a1codechallenge.data.network.response.MainTypesResponse
+import my.illrock.a1codechallenge.data.network.response.ManufacturersResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

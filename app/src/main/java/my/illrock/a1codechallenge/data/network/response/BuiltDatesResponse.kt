@@ -1,4 +1,4 @@
-package my.illrock.a1codechallenge.data.network.response.manufacturer
+package my.illrock.a1codechallenge.data.network.response
 
 import com.squareup.moshi.JsonClass
 
