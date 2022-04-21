@@ -1,5 +1,6 @@
 package my.illrock.a1codechallenge.presentation.view.manufacturer
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.Manufacturer
 import my.illrock.a1codechallenge.databinding.FragmentManufacturersBinding
 import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturerLoadingStateAdapter
@@ -39,7 +42,9 @@ class ManufacturersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvManufacturers.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                LinearLayoutManager(context)
+            } else GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
             adapter = manufacturersAdapter.withLoadStateHeaderAndFooter(
                 ManufacturerLoadingStateAdapter { manufacturersAdapter.retry() },
                 ManufacturerLoadingStateAdapter { manufacturersAdapter.retry() }

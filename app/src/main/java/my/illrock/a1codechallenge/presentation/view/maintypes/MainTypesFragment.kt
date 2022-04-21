@@ -1,5 +1,6 @@
 package my.illrock.a1codechallenge.presentation.view.maintypes
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.MainType
@@ -59,8 +63,11 @@ class MainTypesFragment : Fragment() {
         }
 
         binding.rvMainTypes.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                LinearLayoutManager(context)
+            } else GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
             adapter = mainTypesAdapter
+            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
         binding.srlPull.setOnRefreshListener {
             vm.loadMainTypes(args.manufacturer.id, true)
