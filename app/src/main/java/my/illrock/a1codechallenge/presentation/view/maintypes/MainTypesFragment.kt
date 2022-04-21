@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.MainType
 import my.illrock.a1codechallenge.databinding.FragmentMainTypesBinding
+import my.illrock.a1codechallenge.presentation.view.util.ViewModelResult
 import my.illrock.a1codechallenge.util.hideKeyboardFrom
 import my.illrock.a1codechallenge.util.showKeyboard
 
@@ -73,17 +74,24 @@ class MainTypesFragment : Fragment() {
             vm.loadMainTypes(args.manufacturer.id, true)
         }
 
-        vm.mainTypes.observe(viewLifecycleOwner) {
-            mainTypesAdapter.submitList(it)
-        }
-        vm.isLoading.observe(viewLifecycleOwner) {
-            binding.srlPull.isRefreshing = it
-        }
-        vm.errorMessage.observe(viewLifecycleOwner) {
-            showError(it)
-        }
-        vm.errorRes.observe(viewLifecycleOwner) {
-            showError(it)
+        vm.result.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ViewModelResult.Loading -> {
+                    binding.srlPull.isRefreshing = true
+                }
+                is ViewModelResult.Success -> {
+                    binding.srlPull.isRefreshing = false
+                    mainTypesAdapter.submitList(result.data)
+                    binding.tvError.isVisible = false
+                    binding.rvMainTypes.isVisible = true
+                }
+                is ViewModelResult.Error -> {
+                    binding.srlPull.isRefreshing = false
+                    binding.rvMainTypes.isVisible = false
+                    result.errorMessage?.let { setError(it) }
+                    result.errorRes?.let { setError(it) }
+                }
+            }
         }
         vm.isSearch.observe(viewLifecycleOwner) {
             if (it) startSearch()
@@ -92,13 +100,12 @@ class MainTypesFragment : Fragment() {
         vm.loadMainTypes(args.manufacturer.id, false)
     }
 
-    private fun showError(errorRes: Int?) {
+    private fun setError(errorRes: Int?) {
         val error = errorRes?.let { getString(it) }
-        showError(error)
+        setError(error)
     }
 
-    private fun showError(error: String?) {
-        binding.rvMainTypes.isVisible = error == null
+    private fun setError(error: String?) {
         binding.tvError.isVisible = error != null
         error?.let { binding.tvError.text = it }
     }

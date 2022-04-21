@@ -12,4 +12,6 @@
     <string name="error_no_data">No data</string>
     <string name="error_connection">No internet connection</string>
     <string name="error_unknown">Whoops! Something went wrong :(</string>
+
+    <string name="error_search_empty">Nothing was found</string>
 </resources>

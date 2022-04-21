@@ -15,6 +15,7 @@ import my.illrock.a1codechallenge.data.model.MainType
 import my.illrock.a1codechallenge.data.network.response.ResultWrapper
 import my.illrock.a1codechallenge.data.repository.MainTypesRepository
 import my.illrock.a1codechallenge.data.repository.exception.NoDataException
+import my.illrock.a1codechallenge.presentation.view.util.ViewModelResult
 import my.illrock.a1codechallenge.util.getOrAwaitValue
 import org.junit.Assert.*
 
@@ -55,12 +56,9 @@ class MainTypesViewModelTest {
     fun loadMainTypes_success_forced() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertNull(vm.errorMessage.getOrAwaitValue())
-            assertNull(vm.errorRes.getOrAwaitValue())
             assertEquals(
                 mainTypesMock(),
-                vm.mainTypes.getOrAwaitValue()
+                vm.getSuccess().data
             )
         }
 
@@ -71,12 +69,9 @@ class MainTypesViewModelTest {
     fun loadMainTypes_success_notForced() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertNull(vm.errorMessage.getOrAwaitValue())
-            assertNull(vm.errorRes.getOrAwaitValue())
             assertEquals(
                 mainTypesMock(),
-                vm.mainTypes.getOrAwaitValue()
+                vm.getSuccess().data
             )
         }
 
@@ -87,13 +82,20 @@ class MainTypesViewModelTest {
     fun loadMainTypes_success_forcedReplacesOld() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(
+                mainTypesMock(),
+                vm.getSuccess().data
+            )
 
             coEvery {
                 mainTypesRepository.get(MOCK_MANUFACTURER_ID)
             } returns ResultWrapper.Success(anotherMainTypesMock())
+
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertEquals(anotherMainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(
+                anotherMainTypesMock(),
+                vm.getSuccess().data
+            )
         }
 
         coVerify(exactly = 2) { mainTypesRepository.get(any()) }
@@ -103,13 +105,19 @@ class MainTypesViewModelTest {
     fun loadMainTypes_success_notForcedDoesNotReplaceOld() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(
+                mainTypesMock(),
+                vm.getSuccess().data
+            )
 
             coEvery {
                 mainTypesRepository.get(MOCK_MANUFACTURER_ID)
             } returns ResultWrapper.Success(anotherMainTypesMock())
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(
+                mainTypesMock(),
+                vm.getSuccess().data
+            )
         }
 
         coVerify(exactly = 1) { mainTypesRepository.get(any()) }
@@ -126,10 +134,7 @@ class MainTypesViewModelTest {
 
             //We have empty mainTypes set, and although it's not forced call, we will reload from network
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertNull(vm.errorMessage.getOrAwaitValue())
-            assertNull(vm.errorRes.getOrAwaitValue())
-            assertTrue(vm.mainTypes.getOrAwaitValue().isEmpty())
+            assertTrue(vm.getSuccess().data.isEmpty())
         }
 
         //Check that we used network twice
@@ -144,10 +149,7 @@ class MainTypesViewModelTest {
 
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertNull(vm.errorMessage.getOrAwaitValue())
-            assertEquals(R.string.error_no_data, vm.errorRes.getOrAwaitValue())
-            assertTrue(vm.mainTypes.getOrAwaitValue().isEmpty())
+            assertEquals(R.string.error_no_data, vm.getError().errorRes)
         }
 
         coVerify(exactly = 1) { mainTypesRepository.get(any()) }
@@ -161,10 +163,7 @@ class MainTypesViewModelTest {
 
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertNull(vm.errorMessage.getOrAwaitValue())
-            assertEquals(R.string.error_connection, vm.errorRes.getOrAwaitValue())
-            assertTrue(vm.mainTypes.getOrAwaitValue().isEmpty())
+            assertEquals(R.string.error_connection, vm.getError().errorRes)
         }
 
         coVerify(exactly = 1) { mainTypesRepository.get(any()) }
@@ -180,10 +179,7 @@ class MainTypesViewModelTest {
 
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertFalse(vm.isLoading.getOrAwaitValue())
-            assertEquals(expectedMessage, vm.errorMessage.getOrAwaitValue())
-            assertNull(vm.errorRes.getOrAwaitValue())
-            assertTrue(vm.mainTypes.getOrAwaitValue().isEmpty())
+            assertEquals(expectedMessage, vm.getError().errorMessage)
         }
 
         coVerify(exactly = 1) { mainTypesRepository.get(any()) }
@@ -205,17 +201,17 @@ class MainTypesViewModelTest {
     fun stopSearch_resetsMainTypes() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(mainTypesMock(), vm.getSuccess().data)
 
             vm.startSearch()
             vm.onNewSearchInput("5")
             assertEquals(
                 listOf(MainType(MOCK_MAIN_TYPE_2, MOCK_MAIN_TYPE_2)),
-                vm.mainTypes.getOrAwaitValue()
+                vm.getSuccess().data
             )
 
             vm.stopSearch()
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(mainTypesMock(), vm.getSuccess().data)
         }
     }
 
@@ -223,16 +219,22 @@ class MainTypesViewModelTest {
     fun onNewSearchInput() {
         testDispatcher.runBlockingTest {
             vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(mainTypesMock(), vm.mainTypes.getOrAwaitValue())
+            assertEquals(mainTypesMock(), vm.getSuccess().data)
 
             vm.startSearch()
             vm.onNewSearchInput("l")
             assertEquals(
                 listOf(MainType(MOCK_MAIN_TYPE_1, MOCK_MAIN_TYPE_1)),
-                vm.mainTypes.getOrAwaitValue()
+                vm.getSuccess().data
             )
         }
     }
+
+    private fun MainTypesViewModel.getSuccess() =
+        result.getOrAwaitValue() as ViewModelResult.Success
+
+    private fun MainTypesViewModel.getError() =
+        result.getOrAwaitValue() as ViewModelResult.Error
 
     private fun mainTypesMock() = listOf(
         MainType(MOCK_MAIN_TYPE_1, MOCK_MAIN_TYPE_1),

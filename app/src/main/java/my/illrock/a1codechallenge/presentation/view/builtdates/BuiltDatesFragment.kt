@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.databinding.FragmentBuiltDatesBinding
+import my.illrock.a1codechallenge.presentation.view.util.ViewModelResult
 
 @AndroidEntryPoint
 class BuiltDatesFragment : Fragment() {
@@ -58,32 +59,35 @@ class BuiltDatesFragment : Fragment() {
             vm.loadBuiltDates(args.manufacturer.id, args.mainType.id, true)
         }
 
-        vm.builtDates.observe(viewLifecycleOwner) {
-            builtDatesAdapter.submitList(it)
-        }
-
-        vm.isLoading.observe(viewLifecycleOwner) {
-            binding.srlPull.isRefreshing = it
-        }
-
-        vm.errorMessage.observe(viewLifecycleOwner) {
-            showError(it)
-        }
-
-        vm.errorRes.observe(viewLifecycleOwner) {
-            showError(it)
+        vm.result.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ViewModelResult.Loading -> {
+                    binding.srlPull.isRefreshing = true
+                }
+                is ViewModelResult.Success -> {
+                    binding.srlPull.isRefreshing = false
+                    binding.rvBuiltDates.isVisible = true
+                    binding.tvError.isVisible = false
+                    builtDatesAdapter.submitList(result.data)
+                }
+                is ViewModelResult.Error -> {
+                    binding.srlPull.isRefreshing = false
+                    binding.rvBuiltDates.isVisible = false
+                    result.errorRes?.let { setError(it) }
+                    result.errorMessage?.let { setError(it) }
+                }
+            }
         }
 
         vm.loadBuiltDates(args.manufacturer.id, args.mainType.id, false)
     }
 
-    private fun showError(errorRes: Int?) {
+    private fun setError(errorRes: Int?) {
         val error = errorRes?.let { getString(it) }
-        showError(error)
+        setError(error)
     }
 
-    private fun showError(error: String?) {
-        binding.rvBuiltDates.isVisible = error == null
+    private fun setError(error: String?) {
         binding.tvError.isVisible = error != null
         error?.let { binding.tvError.text = it }
     }
