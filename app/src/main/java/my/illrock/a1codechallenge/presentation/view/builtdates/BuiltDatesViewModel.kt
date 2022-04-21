@@ -13,6 +13,7 @@ import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.data.network.response.ResultWrapper
 import my.illrock.a1codechallenge.data.repository.BuiltDatesRepository
+import my.illrock.a1codechallenge.data.repository.exception.NoDataException
 import my.illrock.a1codechallenge.util.print
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -51,14 +52,8 @@ class BuiltDatesViewModel @Inject constructor(
         when (result) {
             is ResultWrapper.Success -> {
                 _isLoading.value = false
+                clearErrors()
                 _builtDates.value = requireNotNull(result.data)
-                if (result.data.isEmpty()) {
-                    _errorMessage.value = null
-                    _errorRes.value = R.string.error_empty_response
-                } else {
-                    _errorMessage.value = null
-                    _errorRes.value = null
-                }
             }
             is ResultWrapper.Error -> {
                 _isLoading.value = false
@@ -69,6 +64,10 @@ class BuiltDatesViewModel @Inject constructor(
 
     private fun showError(e: Exception) {
         when {
+            e is NoDataException -> {
+                _errorMessage.value = null
+                _errorRes.value = R.string.error_no_data
+            }
             e is UnknownHostException -> {
                 _errorMessage.value = null
                 _errorRes.value = R.string.error_connection
@@ -83,5 +82,10 @@ class BuiltDatesViewModel @Inject constructor(
             }
         }
         e.print()
+    }
+
+    private fun clearErrors() {
+        _errorRes.value = null
+        _errorMessage.value = null
     }
 }

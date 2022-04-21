@@ -61,7 +61,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/error_empty_response"
+                tools:text="@string/error_no_data"
                 tools:visibility="visible"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>

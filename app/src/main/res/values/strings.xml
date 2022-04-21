@@ -9,7 +9,7 @@
 
     <string name="built_dates_title_placeholder">%1$s / %2$s</string>
 
-    <string name="error_empty_response">No data</string>
+    <string name="error_no_data">No data</string>
     <string name="error_connection">No internet connection</string>
-    <string name="error_unknown">Whoops. Something went wrong.</string>
+    <string name="error_unknown">Whoops! Something went wrong :(</string>
 </resources>

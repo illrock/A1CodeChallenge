@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/mainTypesFragment"
-        android:name="my.illrock.a1codechallenge.presentation.view.maintype.MainTypesFragment"
+        android:name="my.illrock.a1codechallenge.presentation.view.maintypes.MainTypesFragment"
         tools:layout="@layout/fragment_main_types"
         >
         <action

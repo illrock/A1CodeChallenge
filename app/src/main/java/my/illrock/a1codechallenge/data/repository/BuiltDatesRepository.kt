@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.data.network.ApiService
 import my.illrock.a1codechallenge.data.network.response.ResultWrapper
+import my.illrock.a1codechallenge.data.repository.exception.NoDataException
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -20,7 +21,8 @@ class BuiltDatesRepository @Inject constructor(
         return try {
             val response = apiService.getBuiltDates(manufacturerId, mainType)
             val builtDates = response.wkda.map { BuiltDate(it.key, it.value) }
-            ResultWrapper.Success(builtDates)
+            if (builtDates.isEmpty()) ResultWrapper.Error(NoDataException())
+            else ResultWrapper.Success(builtDates)
         } catch (e: Exception) {
             ResultWrapper.Error(e)
         }

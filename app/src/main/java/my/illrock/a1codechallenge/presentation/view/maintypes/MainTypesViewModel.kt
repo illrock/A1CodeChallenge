@@ -1,4 +1,4 @@
-package my.illrock.a1codechallenge.presentation.view.maintype
+package my.illrock.a1codechallenge.presentation.view.maintypes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +13,7 @@ import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.MainType
 import my.illrock.a1codechallenge.data.network.response.ResultWrapper
 import my.illrock.a1codechallenge.data.repository.MainTypesRepository
+import my.illrock.a1codechallenge.data.repository.exception.NoDataException
 import my.illrock.a1codechallenge.util.print
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -58,17 +59,10 @@ class MainTypesViewModel @Inject constructor(
         when (result) {
             is ResultWrapper.Success -> {
                 _isLoading.value = false
+                clearErrors()
                 _originalMainTypes.value = requireNotNull(result.data)
                 _mainTypes.value = _originalMainTypes.value
                     .applySearchInput(searchInput)
-
-                if (result.data.isEmpty()) {
-                    _errorMessage.value = null
-                    _errorRes.value = R.string.error_empty_response
-                } else {
-                    _errorMessage.value = null
-                    _errorRes.value = null
-                }
             }
             is ResultWrapper.Error -> {
                 _isLoading.value = false
@@ -79,6 +73,10 @@ class MainTypesViewModel @Inject constructor(
 
     private fun showError(e: Exception) {
         when {
+            e is NoDataException -> {
+                _errorMessage.value = null
+                _errorRes.value = R.string.error_no_data
+            }
             e is UnknownHostException -> {
                 _errorMessage.value = null
                 _errorRes.value = R.string.error_connection
@@ -93,6 +91,11 @@ class MainTypesViewModel @Inject constructor(
             }
         }
         e.print()
+    }
+
+    private fun clearErrors() {
+        _errorRes.value = null
+        _errorMessage.value = null
     }
 
     fun startSearch() {

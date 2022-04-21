@@ -1,4 +1,4 @@
-package my.illrock.a1codechallenge.presentation.view.maintype
+package my.illrock.a1codechallenge.presentation.view.maintypes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.view.maintype.MainTypesFragment"
+    tools:context=".presentation.view.maintypes.MainTypesFragment"
     >
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -83,7 +83,7 @@
         android:id="@+id/srlPull"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.maintype.MainTypesFragment"
+        tools:context=".presentation.view.maintypes.MainTypesFragment"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/error_empty_response"
+                tools:text="@string/error_no_data"
                 tools:visibility="visible"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
