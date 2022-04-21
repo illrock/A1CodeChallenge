@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="appbar_item">@color/black</color>
+    <color name="appbar_item">@color/white</color>
     <color name="app_background">#22FFFFFF</color>
 
-    <color name="text_main">@color/black</color>
-    <color name="text_hint">#22FFFFFF</color>
+    <color name="text_main">@color/white</color>
+    <color name="text_hint">#AAFFFFFF</color>
+    <color name="text_error">@color/white</color>
 
     <color name="item_background_first">@color/black</color>
     <color name="item_background_second">@color/teal_700</color>

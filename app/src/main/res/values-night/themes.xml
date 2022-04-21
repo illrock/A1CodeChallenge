@@ -14,5 +14,6 @@
         <!-- Customize your theme here. -->
         <item name="android:textSize">@dimen/text_standard</item>
         <item name="android:textColor">@color/text_main</item>
+        <item name="colorControlNormal">@color/appbar_item</item>
     </style>
 </resources>

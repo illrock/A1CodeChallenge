@@ -104,6 +104,7 @@
                 android:id="@+id/tvError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_error"
                 android:textSize="@dimen/text_title"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
