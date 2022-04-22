@@ -1,6 +1,5 @@
 package my.illrock.a1codechallenge.presentation.view.manufacturer
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +22,7 @@ import my.illrock.a1codechallenge.databinding.FragmentManufacturersBinding
 import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturerLoadingStateAdapter
 import my.illrock.a1codechallenge.presentation.view.manufacturer.adapter.ManufacturersAdapter
 import my.illrock.a1codechallenge.util.getErrorMessage
+import my.illrock.a1codechallenge.util.isPortraitOrientation
 
 @AndroidEntryPoint
 class ManufacturersFragment : Fragment() {
@@ -42,9 +42,11 @@ class ManufacturersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvManufacturers.apply {
-            layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = if (isPortraitOrientation()) {
                 LinearLayoutManager(context)
-            } else GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            } else {
+                GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            }
             adapter = manufacturersAdapter.withLoadStateHeaderAndFooter(
                 ManufacturerLoadingStateAdapter { manufacturersAdapter.retry() },
                 ManufacturerLoadingStateAdapter { manufacturersAdapter.retry() }

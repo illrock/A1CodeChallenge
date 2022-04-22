@@ -2,6 +2,7 @@ package my.illrock.a1codechallenge.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -34,3 +35,5 @@ fun Activity.showKeyboard(input: View) {
         imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
     }
 }
+
+fun View.isPortraitOrientation() = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT

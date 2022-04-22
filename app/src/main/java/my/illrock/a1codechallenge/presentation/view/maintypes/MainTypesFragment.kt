@@ -1,6 +1,5 @@
 package my.illrock.a1codechallenge.presentation.view.maintypes
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,7 @@ import my.illrock.a1codechallenge.data.model.MainType
 import my.illrock.a1codechallenge.databinding.FragmentMainTypesBinding
 import my.illrock.a1codechallenge.presentation.view.util.ViewModelResult
 import my.illrock.a1codechallenge.util.hideKeyboardFrom
+import my.illrock.a1codechallenge.util.isPortraitOrientation
 import my.illrock.a1codechallenge.util.showKeyboard
 
 @AndroidEntryPoint
@@ -64,9 +64,11 @@ class MainTypesFragment : Fragment() {
         }
 
         binding.rvMainTypes.apply {
-            layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = if (isPortraitOrientation()) {
                 LinearLayoutManager(context)
-            } else GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            } else {
+                GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            }
             adapter = mainTypesAdapter
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
@@ -94,8 +96,7 @@ class MainTypesFragment : Fragment() {
             }
         }
         vm.isSearch.observe(viewLifecycleOwner) {
-            if (it) startSearch()
-            else stopSearch()
+            if (it) startSearch() else stopSearch()
         }
         vm.loadMainTypes(args.manufacturer.id, false)
     }

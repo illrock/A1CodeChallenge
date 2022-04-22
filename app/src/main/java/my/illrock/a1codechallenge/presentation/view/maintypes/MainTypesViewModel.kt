@@ -97,7 +97,10 @@ class MainTypesViewModel @Inject constructor(
     }
 
     private fun List<MainType>?.applySearchInput(input: String) = this?.let { list ->
-        if (input.isEmpty()) list
-        else list.filter { it.name.contains(input, true) }
+        if (input.isEmpty()) {
+            list
+        } else {
+            list.filter { it.name.contains(input, true) }
+        }
     } ?: listOf()
 }

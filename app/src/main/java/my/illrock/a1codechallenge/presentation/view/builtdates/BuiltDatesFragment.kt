@@ -1,6 +1,5 @@
 package my.illrock.a1codechallenge.presentation.view.builtdates
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +20,7 @@ import my.illrock.a1codechallenge.R
 import my.illrock.a1codechallenge.data.model.BuiltDate
 import my.illrock.a1codechallenge.databinding.FragmentBuiltDatesBinding
 import my.illrock.a1codechallenge.presentation.view.util.ViewModelResult
+import my.illrock.a1codechallenge.util.isPortraitOrientation
 
 @AndroidEntryPoint
 class BuiltDatesFragment : Fragment() {
@@ -49,9 +49,11 @@ class BuiltDatesFragment : Fragment() {
         }
 
         binding.rvBuiltDates.apply {
-            layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = if (isPortraitOrientation()) {
                 LinearLayoutManager(context)
-            } else GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            } else {
+                GridLayoutManager(context, resources.getInteger(R.integer.fragment_landscape_columns))
+            }
             adapter = builtDatesAdapter
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
