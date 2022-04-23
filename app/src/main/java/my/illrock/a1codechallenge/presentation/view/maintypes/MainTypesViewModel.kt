@@ -33,11 +33,9 @@ class MainTypesViewModel @Inject constructor(
     private var searchInput: String = ""
 
     fun loadMainTypes(manufacturerId: Long, isForce: Boolean) {
-        if (!isForce && !_originalMainTypes.isNullOrEmpty()) return
-
         _result.value = ViewModelResult.Loading
         viewModelScope.launch(dispatcher) {
-            repository.get(manufacturerId).let { result ->
+            repository.get(manufacturerId, isForce).let { result ->
                 withContext(Dispatchers.Main) {
                     handleMainTypesResult(result)
                 }
@@ -91,7 +89,9 @@ class MainTypesViewModel @Inject constructor(
         if (isSearch.value == true) {
             val vmResult = if (searchedTypes.isEmpty()) {
                 ViewModelResult.Error(errorRes = R.string.error_search_empty)
-            } else ViewModelResult.Success(searchedTypes)
+            } else {
+                ViewModelResult.Success(searchedTypes)
+            }
             _result.value = vmResult
         }
     }

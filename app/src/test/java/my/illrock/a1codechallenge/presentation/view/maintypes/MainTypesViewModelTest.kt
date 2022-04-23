@@ -34,7 +34,7 @@ class MainTypesViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
     private val mainTypesRepository = mockk<MainTypesRepository> {
         coEvery {
-            get(MOCK_MANUFACTURER_ID)
+            get(MOCK_MANUFACTURER_ID, any())
         } returns ResultWrapper.Success(mainTypesMock())
     }
 
@@ -62,7 +62,7 @@ class MainTypesViewModelTest {
             )
         }
 
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
+        coVerify(exactly = 1) { mainTypesRepository.get(any(), true) }
     }
 
     @Test
@@ -75,76 +75,13 @@ class MainTypesViewModelTest {
             )
         }
 
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
-    }
-
-    @Test
-    fun loadMainTypes_success_forcedReplacesOld() {
-        testDispatcher.runBlockingTest {
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(
-                mainTypesMock(),
-                vm.getSuccess().data
-            )
-
-            coEvery {
-                mainTypesRepository.get(MOCK_MANUFACTURER_ID)
-            } returns ResultWrapper.Success(anotherMainTypesMock())
-
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, true)
-            assertEquals(
-                anotherMainTypesMock(),
-                vm.getSuccess().data
-            )
-        }
-
-        coVerify(exactly = 2) { mainTypesRepository.get(any()) }
-    }
-
-    @Test
-    fun loadMainTypes_success_notForcedDoesNotReplaceOld() {
-        testDispatcher.runBlockingTest {
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(
-                mainTypesMock(),
-                vm.getSuccess().data
-            )
-
-            coEvery {
-                mainTypesRepository.get(MOCK_MANUFACTURER_ID)
-            } returns ResultWrapper.Success(anotherMainTypesMock())
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertEquals(
-                mainTypesMock(),
-                vm.getSuccess().data
-            )
-        }
-
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
-    }
-
-    @Test
-    fun loadMainTypes_success_twice_empty() {
-        coEvery {
-            mainTypesRepository.get(MOCK_MANUFACTURER_ID)
-        } returns ResultWrapper.Success(listOf())
-
-        testDispatcher.runBlockingTest {
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-
-            //We have empty mainTypes set, and although it's not forced call, we will reload from network
-            vm.loadMainTypes(MOCK_MANUFACTURER_ID, false)
-            assertTrue(vm.getSuccess().data.isEmpty())
-        }
-
-        //Check that we used network twice
-        coVerify(exactly = 2) { mainTypesRepository.get(any()) }
+        coVerify(exactly = 1) { mainTypesRepository.get(any(), false) }
     }
 
     @Test
     fun loadMainTypes_error_noData() {
         coEvery {
-            mainTypesRepository.get(MOCK_MANUFACTURER_ID)
+            mainTypesRepository.get(MOCK_MANUFACTURER_ID, any())
         } returns ResultWrapper.Error(NoDataException())
 
         testDispatcher.runBlockingTest {
@@ -152,13 +89,13 @@ class MainTypesViewModelTest {
             assertEquals(R.string.error_no_data, vm.getError().errorRes)
         }
 
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
+        coVerify(exactly = 1) { mainTypesRepository.get(any(), any()) }
     }
 
     @Test
     fun loadMainTypes_error_noInternet() {
         coEvery {
-            mainTypesRepository.get(MOCK_MANUFACTURER_ID)
+            mainTypesRepository.get(MOCK_MANUFACTURER_ID, any())
         } returns ResultWrapper.Error(UnknownHostException())
 
         testDispatcher.runBlockingTest {
@@ -166,7 +103,7 @@ class MainTypesViewModelTest {
             assertEquals(R.string.error_connection, vm.getError().errorRes)
         }
 
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
+        coVerify(exactly = 1) { mainTypesRepository.get(any(), any()) }
     }
 
     @Test
@@ -174,7 +111,7 @@ class MainTypesViewModelTest {
         val expectedMessage = "Woah, what's wrong?"
         val expectedException = Exception(expectedMessage)
         coEvery {
-            mainTypesRepository.get(MOCK_MANUFACTURER_ID)
+            mainTypesRepository.get(MOCK_MANUFACTURER_ID, any())
         } returns ResultWrapper.Error(expectedException)
 
         testDispatcher.runBlockingTest {
@@ -182,7 +119,7 @@ class MainTypesViewModelTest {
             assertEquals(expectedMessage, vm.getError().errorMessage)
         }
 
-        coVerify(exactly = 1) { mainTypesRepository.get(any()) }
+        coVerify(exactly = 1) { mainTypesRepository.get(any(), any()) }
     }
 
     @Test
@@ -241,14 +178,9 @@ class MainTypesViewModelTest {
         MainType(MOCK_MAIN_TYPE_2, MOCK_MAIN_TYPE_2),
     )
 
-    private fun anotherMainTypesMock() = listOf(
-        MainType(MOCK_MAIN_TYPE_3, MOCK_MAIN_TYPE_3),
-    )
-
     private companion object {
         const val MOCK_MANUFACTURER_ID = 303L
         const val MOCK_MAIN_TYPE_1 = "XL3"
         const val MOCK_MAIN_TYPE_2 = "XXS5"
-        const val MOCK_MAIN_TYPE_3 = "L1"
     }
 }

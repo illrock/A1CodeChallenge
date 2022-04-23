@@ -28,11 +28,9 @@ class BuiltDatesViewModel @Inject constructor(
     val result: LiveData<ViewModelResult<List<BuiltDate>>> = _result
 
     fun loadBuiltDates(manufacturerId: Long, mainTypeId: String, isForce: Boolean) {
-        if (!isForce && result.isNotEmptySuccess()) return
-
         _result.value = ViewModelResult.Loading
         viewModelScope.launch(dispatcher) {
-            repository.get(manufacturerId, mainTypeId).let { result ->
+            repository.get(manufacturerId, mainTypeId, isForce).let { result ->
                 withContext(Dispatchers.Main) {
                     handleBuiltDatesResult(result)
                 }

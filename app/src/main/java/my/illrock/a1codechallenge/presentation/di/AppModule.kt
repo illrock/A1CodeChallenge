@@ -1,6 +1,7 @@
 package my.illrock.a1codechallenge.presentation.di
 
 import android.content.Context
+import androidx.room.Room
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -9,6 +10,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import my.illrock.a1codechallenge.BuildConfig
+import my.illrock.a1codechallenge.data.db.A1Database
+import my.illrock.a1codechallenge.data.db.builtdates.BuiltDateDao
+import my.illrock.a1codechallenge.data.db.maintypes.MainTypeDao
 import my.illrock.a1codechallenge.data.network.ApiService
 import my.illrock.a1codechallenge.data.network.interceptor.HttpInterceptor
 import okhttp3.OkHttpClient
@@ -47,6 +51,19 @@ class AppModule {
 
     @Provides
     fun provideCoroutineDispatcher() = Dispatchers.IO
+
+    @Provides
+    fun provideDatabase(@ApplicationContext context: Context): A1Database {
+        return Room.databaseBuilder(context, A1Database::class.java, A1Database.NAME)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    fun provideMainTypeDao(database: A1Database): MainTypeDao = database.mainTypeDao()
+
+    @Provides
+    fun provideBuiltDateDao(database: A1Database): BuiltDateDao = database.builtDateDao()
 
     companion object {
         private const val CONNECT_TIMEOUT = 15L

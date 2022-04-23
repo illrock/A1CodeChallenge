@@ -14,7 +14,8 @@ import javax.inject.Singleton
 class ManufacturersRepository @Inject constructor(
     private val apiService: ApiService
 ) {
-    //todo use remote mediator, store results in Room db?
+    //todo use remote mediator, store results in Room db
+    // connect manufacturers and mainTypes table by foreignKey, with cascade delete
     suspend fun get(): Flow<PagingData<Manufacturer>> = Pager(
         config = PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE),
         pagingSourceFactory = { ManufacturersPagingDataSource(apiService) }
