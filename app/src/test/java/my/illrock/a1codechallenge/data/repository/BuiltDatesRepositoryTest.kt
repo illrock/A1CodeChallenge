@@ -209,8 +209,8 @@ class BuiltDatesRepositoryTest {
     private companion object {
         const val MOCK_MANUFACTURER_ID = 202L
         const val MOCK_MAIN_TYPE_ID = "8er"
-        const val MOCK_BUILT_DATE_1 = "2014"
-        const val MOCK_BUILT_DATE_2 = "2015"
+        const val MOCK_BUILT_DATE_1 = "2015"
+        const val MOCK_BUILT_DATE_2 = "2014"
 
         const val MOCK_TIME = 200L
         const val MOCK_OUTDATED_TIME = MOCK_TIME + DateUtils.HOUR_IN_MILLIS + 1
