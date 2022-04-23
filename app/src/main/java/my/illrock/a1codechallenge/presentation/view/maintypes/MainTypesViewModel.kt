@@ -49,8 +49,12 @@ class MainTypesViewModel @Inject constructor(
                 _originalMainTypes.clear()
                 _originalMainTypes.addAll(result.data)
 
-                val searchedData = result.data.applySearchInput(searchInput)
-                _result.value = ViewModelResult.Success(searchedData)
+                if (searchInput.isEmpty()) {
+                    _result.value = ViewModelResult.Success(result.data)
+                } else {
+                    val searchedData = result.data.applySearchInput(searchInput)
+                    _result.value = getSearchResult(searchedData)
+                }
             }
             is ResultWrapper.Error -> {
                 _originalMainTypes.clear()
@@ -76,24 +80,26 @@ class MainTypesViewModel @Inject constructor(
 
     fun stopSearch() {
         _isSearch.value = false
+        searchInput = ""
         if (_originalMainTypes.isNotEmpty()) {
             _result.value = ViewModelResult.Success(_originalMainTypes)
         }
     }
 
     fun onNewSearchInput(input: String) {
-        if (_originalMainTypes.isEmpty()) return
         searchInput = input
+        if (_originalMainTypes.isEmpty()) return
         val searchedTypes = _originalMainTypes
             .applySearchInput(input)
         if (isSearch.value == true) {
-            val vmResult = if (searchedTypes.isEmpty()) {
-                ViewModelResult.Error(errorRes = R.string.error_search_empty)
-            } else {
-                ViewModelResult.Success(searchedTypes)
-            }
-            _result.value = vmResult
+            _result.value = getSearchResult(searchedTypes)
         }
+    }
+
+    private fun getSearchResult(searchedTypes: List<MainType>) = if (searchedTypes.isEmpty()) {
+        ViewModelResult.Error(errorRes = R.string.error_search_empty)
+    } else {
+        ViewModelResult.Success(searchedTypes)
     }
 
     private fun List<MainType>?.applySearchInput(input: String) = this?.let { list ->
