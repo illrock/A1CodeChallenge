@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:hint="@string/main_types_search_hint"
-                    android:imeOptions="actionSearch"
+                    android:imeOptions="actionSearch|flagNoExtractUi"
                     android:inputType="text"
                     android:lines="1"
                     android:textColor="@color/text_main"
